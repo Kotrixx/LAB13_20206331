@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Bicicentro Gtics</title>
+    <!-- Enlace a Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+</head>
+<body>
+
+<div class="container mt-4">
+
+    <div class="container-fluid float-left" style="max-width: 300px;">
+        <!-- Logo -->
+        <img src="logo.jpeg" alt="Logo" class="img-fluid">
+    </div>
+
+    <!-- Título -->
+    <h1 class="text-primary">Bicicentro Gtics</h1>
+    <br><br><br>
+
+
+    <!-- Subtítulo Lista de Trabajadores -->
+    <h2>Detalles del trabajador</h2>
+    <!-- Detalles del Trabajador -->
+    <div class="row">
+        <div class="col-md-6" id="holiwis">
+            <!-- Información del Trabajador (puedes agregar más detalles) -->
+
+        </div>
+    </div>
+    <!-- Línea divisoria -->
+    <hr>
+
+    <!-- Botón Regresar -->
+    <a href="listaTrabajadores.html" class="btn btn-secondary mb-3">Regresar a la lista de trabajadores</a>
+
+    <!-- Línea de tabla -->
+    <hr>
+    <!-- Tabla -->
+    <table class="table">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Nombre producto</th>
+            <th>Nümero de serie</th>
+            <th>Marca</th>
+            <th>Fecha</th>
+        </tr>
+
+
+        </thead>
+        <tbody>
+
+
+        </tbody>
+    </table>
+</div>
+
+<!-- Enlace a Bootstrap JS y Popper.js (si es necesario) -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script>
+    $(document).ready(function () {
+        let url = new URLSearchParams(window.location.search);
+        let id = url.get('dni');
+        $("#obtenerLista").ready(function () {
+            $.ajax({
+                method: "GET",
+                dataType: "json",
+                crossDomain: true,
+                url: "http://127.0.0.1:3000/trabajadores/ventas/" + id
+            }).done(function (data) {
+                var lista = data;
+                var contentHtml = "";
+                $.each(lista, function (i, t) {
+                    contentHtml += "<tr>";
+                    contentHtml += "<td>" + (i + 1) + "</td>";
+                    contentHtml += "<td>" + t.nombre + "</td>";
+                    contentHtml += "<td>" + t.numeroserie + "</td>";
+                    contentHtml += "<td>" + t.marca + "</td>";
+                    contentHtml += "<td>" + t.fecha + "</td>";
+                    contentHtml += "</tr>";
+
+                });
+                $("table tbody").html(contentHtml);
+            }).fail(function (err) {
+                var jsonData = err.responseJSON;
+                console.log(jsonData.msg);
+                alert(jsonData.msg);
+            });
+        });
+
+        $("#holiwis").ready(function () {
+            $.ajax({
+                method: "GET",
+                dataType: "json",
+                crossDomain: true,
+                url: "http://127.0.0.1:3000/trabajadores/82901290"
+            }).done(function (data) {
+                var lista2 = data;
+                var otroServicioHtml = "";
+                $.each(lista2, function (i, t) {
+
+                    otroServicioHtml += "<p><strong>DNI:</strong>"
+                    otroServicioHtml += "<p><strong>Nombres:</strong> + t.nombres + " < /p>";
+                    otroServicioHtml += "<p><strong>Apellidos:</strong> + t.apellidos + " < /p>";
+                    otroServicioHtml += "<p><strong>Correo:</strong> + t.correo + " < /p>";
+                    otroServicioHtml += "<p><strong>Sede:</strong> + t.idsede + " < /p>";
+
+                    $("#holiwis").append(otroServicioHtml);
+                }).fail(function (err) {
+                    var jsonData = err.responseJSON;
+                    console.log(jsonData.msg);
+                    alert(jsonData.msg);
+                });
+            });
+        });
+</script>
+</body>
+</html>

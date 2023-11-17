@@ -52,8 +52,7 @@ app.get("/trabajadores/ventas/:dni",(req,res) => {
 
     let dni = req.params["dni"];
 
-    let sql = "SELECT * FROM bicicentro.trabajadores t INNER JOIN bicicentro.ventas v ON t.dni = v.dniTrabajador WHERE t.dni = ?";
-
+    let sql = "SELECT fecha,i.nombre,i.numeroserie, m.nombre as `marca` FROM bicicentro.ventas v INNER JOIN bicicentro.inventario i ON i.idinventario = v.id_inventario INNER JOIN bicicentro.marcas m ON m.idmarca = i.idmarca WHERE v.dniTrabajador = ?";
     conn.query(sql,[dni], (err, result, fields) => {
         if(err) throw err;
         res.json(result);
