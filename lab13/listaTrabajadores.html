@@ -6,6 +6,8 @@
     <title>Bicicentro Gtics</title>
     <!-- Enlace a Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
 </head>
 <body>
 
@@ -42,28 +44,44 @@
         </tr>
         </thead>
         <tbody>
-        <!-- Fila 1 -->
-        <tr>
-            <td>1</td>
-            <td>Juan Pérez</td>
-            <td>Mecánico</td>
-            <td><button class="btn btn-info">Ver Detalle</button></td>
-        </tr>
-        <!-- Fila 2 (puedes agregar más filas según sea necesario) -->
-        <tr>
-            <td>2</td>
-            <td>Maria López</td>
-            <td>Vendedor</td>
-            <td><button class="btn btn-info">Ver Detalle</button></td>
-        </tr>
-        <!-- ... -->
+
+
         </tbody>
     </table>
 </div>
 
 <!-- Enlace a Bootstrap JS y Popper.js (si es necesario) -->
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#obtenerLista").ready(function () {
+            $.ajax({
+                method: "GET",
+                dataType: "json",
+                crossDomain: true,
+                url: "http://127.0.0.1:3000/trabajadores"
+            }).done(function (data) {
+                var lista = data;
+                var contentHtml = "";
+                $.each(lista, function (i, t) {
+                    contentHtml += "<tr>";
+                    contentHtml += "<td>" + t.nombres + "</td>";
+                    contentHtml += "<td>" + t.apellidos + "</td>";
+                    contentHtml += "<td>" + t.correo + "</td>";
+                    contentHtml += "<td><a class='btn btn-warning' href='masDetalles.html?dni=" + (t.dni) + "'>Mas detalles</a></td>";
+                    contentHtml += "</tr>";
+
+                });
+                $("table tbody").html(contentHtml);
+            }).fail(function (err) {
+                var jsonData = err.responseJSON;
+                console.log(jsonData.msg);
+                alert(jsonData.msg);
+            });
+        });
+    });
+</script>
 </body>
 </html>

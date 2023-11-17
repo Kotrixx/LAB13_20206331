@@ -1,9 +1,11 @@
+
 const express = require('express');
+var cors = require('cors')
 const mysql = require("mysql2");
-
 const app = express();
-const port = 3000;
+app.use(cors())
 
+const port = 3000;
 const conn = mysql.createConnection({
     host:"localhost",
     port: 3306,
@@ -28,10 +30,7 @@ app.get('/trabajadores',function(req,res){
     conn.query(sql,(err, result, fields) => {
         if(err) throw err;
 
-        res.json({
-            //horaActual: horaActual,
-            jobs: result
-        });
+        res.json(result);
     });
 
 });
